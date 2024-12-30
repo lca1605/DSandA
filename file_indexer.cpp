@@ -6,6 +6,8 @@
 #include <unordered_map>
 
 namespace fs = std::filesystem;
+int n = 0;
+
 
 struct FileNode {
     std::string fileName;
@@ -32,7 +34,10 @@ private:
             node->left = insert(node->left, fileName, filePath);
         } else if (fileName > node->fileName) {
             node->right = insert(node->right, fileName, filePath);
-        }
+        } else if (fileName == node->fileName) {
+	    std::cout << "File " << node->fileName << "already exists" << std::endl;
+	    n = 1;
+	}
         return node;
     }
 
@@ -171,7 +176,10 @@ int main(int argc, char* argv[]) {
 
     if (command == "add" && !filePath.empty()) {
         fileIndex.addFile(fileName, filePath);
-        std::cout << "Added file: " << fileName << " at " << filePath << std::endl;
+	if (n == 0) {
+        	std::cout << "Added file: " << fileName << " at " << filePath << std::endl;
+	}
+	n = 0;
     } else if (command == "remove") {
         fileIndex.removeFile(fileName);
         std::cout << "Removed file: " << fileName << std::endl;
